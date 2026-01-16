@@ -1,12 +1,8 @@
 import * as Location from "expo-location";
-import { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-//Local Files :
+//Local components  :
 import ReloadIcon from "@/components/ReloadIcon";
 import UnitPicker from "@/components/UnitPicker";
 import WeatherDetails from "@/components/WeatherDeatils";
@@ -22,10 +18,14 @@ export default function App() {
   const [errorMSG, setErrorMSG] = useState("");
   const [currentWeather, setCurrentWeather] = useState(null);
   const [unitSystem, setUnitSystem] = useState("metric");
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     load();
   }, [unitSystem]);
+
   async function load() {
+    setLoading(true);
     setErrorMSG("");
     setCurrentWeather(null);
     try {
@@ -48,14 +48,13 @@ export default function App() {
       setErrorMSG(errorMSG);
     }
   }
-  if (currentWeather) {
+  if (currentWeather ) {
     const {
       main: { temp },
     } = currentWeather;
     return (
       <View style={styles.container}>
         <View style={styles.main}>
-          
           <UnitPicker unitSystem={unitSystem} setUnitSystem={setUnitSystem} />
           <ReloadIcon load={load}></ReloadIcon>
           <WeatherInfo currentWeather={currentWeather} />
@@ -66,7 +65,7 @@ export default function App() {
         ></WeatherDetails>
       </View>
     );
-  } else {
+  } else if (errorMSG) {
     return (
       <View
         style={{
@@ -75,8 +74,17 @@ export default function App() {
           alignItems: "center",
         }}
       >
-        <Text>There is no data to display</Text>
+        <ReloadIcon load={load}></ReloadIcon>
+        <Text style={{ textAlign: "center" }}>There is no data to display</Text>
+        
       </View>
+    );
+  }
+  else{
+    return(
+      <View style={styles.container}>
+      <ActivityIndicator size='large' color='red'/>
+    </View>
     );
   }
 }

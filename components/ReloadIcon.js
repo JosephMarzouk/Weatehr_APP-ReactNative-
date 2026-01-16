@@ -3,8 +3,8 @@ import { StyleSheet, View } from "react-native";
 
 export default function ReloadIcon({ load }) {
   return (
-    <View style={StyleSheet.reloadIcon}>
-      <Ionicons onPress={load} name="ios-refresh" size={24} color="red" />
+    <View style={styles.reloadIcon}>
+      <Ionicons onPress={load} name="refresh" size={24} color="red" />
     </View>
   );
 }
